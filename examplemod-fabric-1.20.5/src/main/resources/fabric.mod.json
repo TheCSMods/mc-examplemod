@@ -1,37 +1,34 @@
 {
 	"schemaVersion": 1,
-	"id": "${project.mod_id}",
-	"version": "${project.mod_version}",
+	"id": "${project.properties.mod_id}",
+	"version": "${project.properties.mod_version}",
 
-	"name": "${project.mod_name}",
-	"description": "${project.mod_description}",
-	"authors": ["${project.mod_author}"],
+	"name": "${project.properties.mod_name}",
+	"description": "${project.properties.mod_description}",
+	"authors": ["${project.properties.mod_author}"],
 	"contact":
 	{
-		"homepage": "${project.mod_contact_homepage}",
-		"sources": "${project.mod_contact_sources}",
-		"issues": "${project.mod_contact_issues}"
+		"homepage": "${project.properties.mod_contact_homepage}",
+		"sources": "${project.properties.mod_contact_sources}",
+		"issues": "${project.properties.mod_contact_issues}"
 	},
 
-	"license": "${project.mod_license}",
-	"icon": "${mod_icon}",
+	"license": "${project.properties.mod_license}",
+	"icon": "${project.properties.mod_icon}",
 
 	"environment": "*",
 	"entrypoints":
 	{
-		"client": ["${project.mod_entrypoint_client}"],
-		"server": ["${project.mod_entrypoint_server}"]
+		"client": ["${project.properties.mod_entrypoint_client}"],
+		"server": ["${project.properties.mod_entrypoint_server}"]
 	},
-	"mixins":
-	[
-		"examplemod.mixin.security.json"
-	],
+	"": "${project.ext.fmj_mixins}",
 	
-	"jars": [ { "file":"${project.jarjar_tcdcommons}" } ],
+	"": "${project.ext.fmj_jars}",
 	"depends":
 	{
-		"fabricloader": ">=${project.loader_version}",
-		"minecraft": "${project.mod_depends_minecraft}",
-		"java": "${project.mod_depends_java}"
+		"fabricloader": ">=${project.properties.loader_version}",
+		"minecraft": "${project.properties.mod_depends_minecraft}",
+		"java": "${project.properties.mod_depends_java}"
 	}
 }

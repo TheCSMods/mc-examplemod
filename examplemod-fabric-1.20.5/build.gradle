@@ -45,7 +45,8 @@ dependencies
 	// modApi "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 	
 	// Architectury API
-	// modApi "dev.architectury:architectury-fabric:${project.architectury_version}"
+	modApi "dev.architectury:architectury-fabric:${project.architectury_version}"
+	// ^ Note: TCDCommons API may depend on Architectury!
 	
 	// Spark, for performance profiling reasons
 	// modImplementation "curse.maven:spark-361579:4950610" //This file is for 1.20.4
@@ -60,10 +61,35 @@ dependencies
 
 base { archivesName = "${project.mod_id}-${project.mod_version}" }
 
+ext { fmj_jars = null; fmj_mixins = null; }
 processResources
 {
+	def rssDirPath = new File("${project.projectDir}/src/main/resources").toPath();
+	
+	//obtain all jar files in `jarjar`, and construct a String for the `jars` entry in `fabric.mod.json`.
+	//due to a bug in the compiler, this uses a cheesy workaround that injects json code into a json string
+	def fmj_jars = new ArrayList<String>();
+	fileTree(dir: rssDirPath.resolve("/src/main/resources/META-INF/jarjar").toString(), include: '*.jar')
+		.each { jarFile -> fmj_jars.add(rssDirPath.relativize(jarFile.toPath()).toString().replace('\\', '/')) };
+	fmj_jars = fmj_jars.collect { jarFile -> "{ \"file\": \"${jarFile}\" }" };
+	fmj_jars = "\", \"jars\": [" + fmj_jars.join(', ') + "], \"\": \"";
+	project.ext.fmj_jars = fmj_jars;
+	
+	//obtain all mixin files in `resources` and construct a String for the `mixins` entry in `fabric.mod.json`
+	//due to a bug in the compiler, this uses a cheesy workaround that injects json code into a json string
+	def fmj_mixins = new ArrayList<String>();
+	fileTree(dir: rssDirPath.toString(), include: '*.json').each { jsonFile ->
+		//skip non-mixin files
+		if(!jsonFile.getName().contains(".mixin.")) return;
+		//add file name to the list
+		fmj_mixins.add(jsonFile.getName());
+	}
+	fmj_mixins = fmj_mixins.collect { jsonFile -> "\"${jsonFile}\"" }.join(", ");
+	fmj_mixins = "\", \"mixins\": [" + fmj_mixins + "], \"\": \"";
+	project.ext.fmj_mixins = fmj_mixins;
+	
 	//expand project properties to resources that might need it
-	filesMatching(["**/*.json", "fabric.mod.json", "pack.mcmeta"]) { expand project.properties }
+	filesMatching(["**/*.json", "pack.mcmeta"]) { expand(project: project); }
 }
 
 tasks.withType(JavaCompile).configureEach
@@ -92,12 +118,25 @@ jar
 {
 	//exclude all .class files outside of the maven group
 	def includeOnlyPackage = project.maven_group.replaceAll('\\.', '/')
-	eachFile { fileCopyDetails ->
+	eachFile
+	{ fileCopyDetails ->
         if (fileCopyDetails.name.endsWith('.class') && !fileCopyDetails.relativePath.pathString.startsWith(includeOnlyPackage)) {
             fileCopyDetails.exclude()
         }
     }
     
-    //handle the license file
+    //include the license file
 	from("LICENSE")
+	
+	//put gradle project properties into manifest properties as well.
+	//this will allow the mod to read its own gradle properties during runtime
+	project.properties.each
+	{ key, value ->
+		//skip certain entries
+		if(!(value instanceof String)) return;
+		
+		//sanitize keys so they adhere to the MANIFEST spec, and assign attributes
+		key = key.replace('.', '_');
+		manifest { attributes(("project-" + key): ("" + value)) }
+	}
 }

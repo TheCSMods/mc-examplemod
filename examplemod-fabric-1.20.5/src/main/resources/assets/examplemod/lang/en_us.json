@@ -1,4 +1,4 @@
 {
-	"${project.mod_id}": "Example Mod",
-	"${project.mod_id}.my_custom_translatable_text": "Hello World!"
+	"${project.properties.mod_id}": "Example Mod",
+	"${project.properties.mod_id}.my_custom_translatable_text": "Hello World!"
 }
