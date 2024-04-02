@@ -29,6 +29,6 @@
 	{
 		"fabricloader": ">=${project.properties.loader_version}",
 		"minecraft": "${project.properties.mod_depends_minecraft}",
-		"java": "${project.properties.mod_depends_java}"
+		"java": ">=17"
 	}
 }
