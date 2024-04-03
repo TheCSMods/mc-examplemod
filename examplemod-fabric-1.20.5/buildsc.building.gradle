@@ -12,6 +12,9 @@ base
  */
 tasks.withType(JavaCompile).configureEach { it.options.release = 17; }
 
+/*
+ * The 'java' task is responsible for compiling the java code.
+ */
 java
 {
 	// Loom will automatically attach sourcesJar to a RemapSourcesJar

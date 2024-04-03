@@ -37,11 +37,11 @@ dependencies
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	
 	// Fabric API
-	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	// Don't forget to declare | "fabric":"*" | as a dependency in fabric.mod.json
 	
 	// Mod Menu
-	// modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 	
 	// Roughly Enough Items
 	// modApi "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"

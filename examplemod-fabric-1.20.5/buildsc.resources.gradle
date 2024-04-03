@@ -46,5 +46,5 @@ while(false);
 processResources
 {
 	//expand project properties to resources that might need them
-	filesMatching(["**/*.json", "pack.mcmeta"]) { expand(project: project); }
+	filesMatching(["*.json", "pack.mcmeta"]) { expand(project: project); }
 }

@@ -13,7 +13,7 @@ import io.github.thecsdev.examplemod.ExampleModFabric;
  * Upon detection, this {@link Mixin} will crash the game, preventing initializer code from executing.<br/>
  * <br/>
  * This is done for security purposes, as there are many viruses out there that spread by injecting
- * code in static initializers. This {@link Mixin}'s goal is to prevent that code from executing.
+ * code into static initializers. This {@link Mixin}'s goal is to prevent that code from executing.
  */
 @Mixin(value = ExampleModFabric.class, priority = 9001)
 public abstract class MixinModLoader
