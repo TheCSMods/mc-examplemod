@@ -1,5 +1,5 @@
 {
-	"package": "${project.maven_group}.${project.mod_id}.mixin.security",
+	"package": "${project.properties.maven_group}.${project.properties.mod_id}.mixin.security",
 	"required": true,
 	"minVersion": "0.8",
 	"compatibilityLevel": "JAVA_17",
