@@ -29,6 +29,7 @@
 	{
 		"fabricloader": ">=${project.properties.loader_version}",
 		"minecraft": "${project.properties.mod_depends_minecraft}",
-		"java": ">=21"
+		"java": ">=21",
+		"tcdcommons": ">=3.12.2"
 	}
 }
